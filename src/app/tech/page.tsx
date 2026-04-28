@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Terminal, Github, Link as LucideLink, Cpu, ShieldCheck, Network, ExternalLink } from 'lucide-react'
+import { TerminalIcon, GithubIcon, LinkIcon, CpuIcon, ShieldCheckIcon, NetworkIcon, ExternalLinkIcon } from 'lucide-react'
 
 export default function TechLabPage() {
   return (
@@ -12,11 +12,11 @@ export default function TechLabPage() {
         </div>
         <div className="flex gap-3">
           <button className="glass px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium hover:bg-muted transition-all">
-            <Github className="w-4 h-4" />
+            <GithubIcon className="w-4 h-4" />
             Connect GitHub
           </button>
           <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-            <Terminal className="w-4 h-4" />
+            <TerminalIcon className="w-4 h-4" />
             Launch Lab
           </button>
         </div>
@@ -26,7 +26,7 @@ export default function TechLabPage() {
         <div className="lg:col-span-2 space-y-6">
           <section className="glass p-8 rounded-3xl space-y-6">
             <div className="flex items-center gap-3">
-              <ShieldCheck className="w-6 h-6 text-blue-500" />
+              <ShieldCheckIcon className="w-6 h-6 text-blue-500" />
               <h3 className="text-xl font-bold font-outfit">Blockchain Audit Trail Research</h3>
             </div>
             <div className="prose prose-invert max-w-none text-sm text-muted-foreground">
@@ -46,7 +46,7 @@ export default function TechLabPage() {
 
           <section className="glass p-8 rounded-3xl space-y-6">
             <div className="flex items-center gap-3">
-              <Network className="w-6 h-6 text-purple-500" />
+              <NetworkIcon className="w-6 h-6 text-purple-500" />
               <h3 className="text-xl font-bold font-outfit">Networking Lab: OSPF/eBGP Optimization</h3>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,16 +76,16 @@ export default function TechLabPage() {
             <h3 className="font-bold font-outfit text-lg">Lab Resources</h3>
             <div className="space-y-3">
               {[
-                { name: 'Blockchain Paper v1.pdf', icon: LucideLink },
-                { name: 'Network Topology Map', icon: Network },
-                { name: 'Lab Configuration Specs', icon: Cpu },
+                { name: 'Blockchain Paper v1.pdf', icon: LinkIcon },
+                { name: 'Network Topology Map', icon: NetworkIcon },
+                { name: 'Lab Configuration Specs', icon: CpuIcon },
               ].map((resource, i) => (
                 <button key={i} className="w-full flex items-center justify-between p-3 bg-muted/30 hover:bg-muted/50 rounded-xl transition-all">
                   <div className="flex items-center gap-3">
                     <resource.icon className="w-4 h-4 text-primary" />
                     <span className="text-sm font-medium">{resource.name}</span>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                  <ExternalLinkIcon className="w-4 h-4 text-muted-foreground" />
                 </button>
               ))}
             </div>
