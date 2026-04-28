@@ -1,8 +1,8 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { 
   LayoutDashboardIcon, 
   LineChartIcon, 
@@ -13,22 +13,63 @@ import {
   BrainCircuitIcon,
   FileTextIcon,
   SearchIcon,
-  PlusIcon
+  PlusIcon,
+  Loader2Icon,
+  ChevronDownIcon
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase'
 
-const navigation = [
+const staticNavigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboardIcon },
   { name: 'Neural Core', href: '/ai', icon: BrainCircuitIcon },
   { name: 'Trading Journal', href: '/trading', icon: LineChartIcon },
-  { name: 'Tech Lab', href: '/tech', icon: TerminalIcon },
-  { name: 'Notes', href: '/notes', icon: FileTextIcon },
   { name: 'Inventory', href: '/inventory', icon: PackageIcon },
-  { name: 'Habits', href: '/habits', icon: CheckCircle2Icon },
 ]
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
+  const [pages, setPages] = useState<any[]>([])
+  const [loadingPages, setLoadingPages] = useState(true)
+  const [creatingPage, setCreatingPage] = useState(false)
+  const supabase = createClient()
+
+  const fetchPages = async () => {
+    const { data, error } = await supabase
+      .from('notes')
+      .select('id, title, icon, parent_id')
+      .order('updated_at', { ascending: false })
+    
+    if (!error && data) {
+      setPages(data)
+    }
+    setLoadingPages(false)
+  }
+
+  useEffect(() => {
+    fetchPages()
+  }, [])
+
+  const createNewPage = async () => {
+    setCreatingPage(true)
+    try {
+      const { data, error } = await supabase
+        .from('notes')
+        .insert([{ title: 'Untitled Page', content_text: '' }])
+        .select()
+        .single()
+      
+      if (data) {
+        setPages([data, ...pages])
+        router.push(`/p/${data.id}`)
+      }
+    } catch (err) {
+      console.error('Error creating page:', err)
+    } finally {
+      setCreatingPage(false)
+    }
+  }
 
   return (
     <aside className="w-64 border-r border-[#27272a] bg-[#050505] h-screen flex flex-col fixed left-0 top-0 z-50">
@@ -38,7 +79,7 @@ export function Sidebar() {
         </div>
         <div>
           <h1 className="font-bold text-sm tracking-tight uppercase">Pawas AI</h1>
-          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter opacity-50">Industrial v1.0</p>
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter opacity-50">Neural OS v1.0</p>
         </div>
       </div>
 
@@ -50,9 +91,9 @@ export function Sidebar() {
         </button>
       </div>
 
-      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto custom-scrollbar pb-10">
         <p className="px-3 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-3 mt-4 opacity-50">Workspace</p>
-        {navigation.map((item) => {
+        {staticNavigation.map((item) => {
           const isActive = pathname === item.href
           return (
             <Link
@@ -73,6 +114,46 @@ export function Sidebar() {
             </Link>
           )
         })}
+
+        <div className="flex items-center justify-between px-3 mt-8 mb-2 group">
+          <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] opacity-50">Pages</p>
+          <button 
+            onClick={createNewPage}
+            disabled={creatingPage}
+            className="p-1 hover:bg-white/10 rounded-md text-muted-foreground opacity-0 group-hover:opacity-100 transition-all"
+          >
+            {creatingPage ? <Loader2Icon className="w-3 h-3 animate-spin" /> : <PlusIcon className="w-3 h-3" />}
+          </button>
+        </div>
+
+        {loadingPages ? (
+          <div className="px-6 py-4 flex items-center gap-2 text-[10px] text-muted-foreground font-bold uppercase tracking-widest">
+            <Loader2Icon className="w-3 h-3 animate-spin" />
+            Synchronizing...
+          </div>
+        ) : (
+          <div className="space-y-0.5">
+            {pages.map((p) => {
+              const href = `/p/${p.id}`
+              const isActive = pathname === href
+              return (
+                <Link
+                  key={p.id}
+                  href={href}
+                  className={cn(
+                    "flex items-center gap-3 px-3 py-1.5 rounded-md transition-all duration-150 group",
+                    isActive 
+                      ? "bg-primary/10 text-primary font-bold" 
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
+                  )}
+                >
+                  <span className="text-sm shrink-0">{p.icon || '📄'}</span>
+                  <span className="text-[13px] truncate">{p.title || 'Untitled'}</span>
+                </Link>
+              )
+            })}
+          </div>
+        )}
       </nav>
 
       <div className="p-4 border-t border-border mt-auto">
@@ -86,11 +167,9 @@ export function Sidebar() {
               <p className="text-[10px] text-muted-foreground font-medium truncate uppercase tracking-tighter">Pro Developer</p>
             </div>
           </div>
-          <button className="w-full py-1.5 bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all border border-border">
-            Settings
-          </button>
         </div>
       </div>
     </aside>
   )
 }
+
