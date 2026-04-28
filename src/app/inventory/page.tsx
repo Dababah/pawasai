@@ -1,5 +1,6 @@
 import React from 'react'
 import { PackageIcon, SearchIcon, PlusIcon, FilterIcon, TagIcon, SmartphoneIcon, ChevronRightIcon, TrendingUpIcon, ShoppingBagIcon } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 const dummyInventory = [
   { id: 1, name: 'iPhone 15 Pro Max', category: 'Smartphone', stock: 5, price: 'Rp 18.500.000', status: 'In Stock', color: 'bg-green-400' },
