@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { Send, Bot, User, Sparkles, Command } from 'lucide-react'
+import { SendIcon, BotIcon, UserIcon, SparklesIcon, CommandIcon, CpuIcon, LayersIcon, ZapIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface Message {
@@ -11,7 +11,7 @@ interface Message {
 
 export default function NeuralCorePage() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Neural Core online. Standing by for command input.' }
+    { role: 'assistant', content: 'Neural Core Online. System integrity check complete. All modules synchronized. Standing by for Pawas AI Command Input.' }
   ])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -50,81 +50,114 @@ export default function NeuralCorePage() {
       }
     } catch (error) {
       console.error('Failed to send message:', error)
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection failure. Neural Core offline.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'CRITICAL ERROR: Neural Link severed. Please check system connectivity.' }])
     } finally {
       setIsLoading(false)
     }
   }
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col max-w-4xl mx-auto">
-      <header className="flex items-center gap-3 mb-8">
-        <div className="p-3 bg-primary/20 rounded-2xl">
-          <Command className="w-6 h-6 text-primary" />
+    <div className="h-[calc(100vh-8rem)] flex flex-col max-w-5xl mx-auto animate-slide-in">
+      <header className="flex justify-between items-center mb-10">
+        <div className="flex items-center gap-4">
+          <div className="p-4 bg-primary/10 rounded-2xl border border-primary/20 glow-primary">
+            <CommandIcon className="w-7 h-7 text-primary" />
+          </div>
+          <div>
+            <h2 className="text-3xl font-bold font-outfit text-gradient">Neural Core</h2>
+            <div className="flex items-center gap-3 mt-1">
+              <span className="flex items-center gap-1.5 text-[10px] font-bold text-green-500 uppercase tracking-widest">
+                <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                Autonomous Active
+              </span>
+              <span className="w-1 h-1 bg-white/10 rounded-full" />
+              <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">v4.0 Alpha</span>
+            </div>
+          </div>
         </div>
-        <div>
-          <h2 className="text-2xl font-bold font-outfit">Neural Core</h2>
-          <p className="text-sm text-muted-foreground flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            Autonomous Agent Online
-          </p>
+        <div className="flex gap-2">
+          <div className="glass px-4 py-2 rounded-xl flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <CpuIcon className="w-3 h-3" />
+            8GB NPU
+          </div>
+          <div className="glass px-4 py-2 rounded-xl flex items-center gap-2 text-xs font-bold text-muted-foreground">
+            <LayersIcon className="w-3 h-3" />
+            128 Context
+          </div>
         </div>
       </header>
 
-      <div className="flex-1 overflow-y-auto space-y-6 pr-4 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto space-y-8 pr-6 custom-scrollbar relative">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-gradient-to-b from-white/5 via-white/2 to-transparent -z-10" />
+        
         {messages.map((m, i) => (
           <div key={i} className={cn(
-            "flex gap-4 animate-fade-in",
+            "flex gap-6 items-start group",
             m.role === 'user' ? "flex-row-reverse" : ""
           )}>
             <div className={cn(
-              "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
-              m.role === 'assistant' ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
+              "w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border transition-all duration-300",
+              m.role === 'assistant' 
+                ? "bg-primary/10 text-primary border-primary/20 glow-primary" 
+                : "bg-white/5 text-white border-white/10"
             )}>
-              {m.role === 'assistant' ? <Bot className="w-5 h-5" /> : <User className="w-5 h-5" />}
+              {m.role === 'assistant' ? <BotIcon className="w-6 h-6" /> : <UserIcon className="w-6 h-6" />}
             </div>
             <div className={cn(
-              "max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed",
+              "max-w-[75%] p-6 rounded-[24px] text-[15px] leading-relaxed relative transition-all duration-300 shadow-2xl",
               m.role === 'assistant' 
-                ? "bg-card border border-white/5 shadow-sm" 
-                : "bg-primary text-primary-foreground font-medium"
+                ? "glass border-white/10 text-foreground/90 font-medium" 
+                : "bg-primary text-primary-foreground font-semibold"
             )}>
               {m.content}
+              {m.role === 'assistant' && (
+                <div className="absolute -bottom-6 left-2 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button className="text-[10px] font-bold text-muted-foreground uppercase hover:text-primary transition-colors">Copy</button>
+                  <button className="text-[10px] font-bold text-muted-foreground uppercase hover:text-primary transition-colors">Regenerate</button>
+                </div>
+              )}
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex gap-4 animate-pulse">
-            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <Bot className="w-5 h-5 text-primary" />
+          <div className="flex gap-6 items-start animate-pulse">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+              <BotIcon className="w-6 h-6 text-primary" />
             </div>
-            <div className="bg-card border border-white/5 p-4 rounded-2xl w-32 h-10" />
+            <div className="glass p-6 rounded-[24px] w-48 h-16 border-white/10" />
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      <form onSubmit={handleSubmit} className="mt-8 relative">
-        <div className="absolute inset-0 bg-primary/20 blur-2xl -z-10 opacity-20" />
-        <div className="glass p-2 rounded-2xl flex items-center gap-2 border-white/10">
+      <form onSubmit={handleSubmit} className="mt-10 relative">
+        <div className="glass p-3 rounded-[28px] border-white/10 flex items-center gap-3 bg-white/[0.02]">
+          <div className="w-10 h-10 bg-white/5 rounded-2xl flex items-center justify-center text-muted-foreground">
+            <ZapIcon className="w-5 h-5" />
+          </div>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Issue a command... (e.g. 'Log a gold trade', 'Check inventory')"
-            className="flex-1 bg-transparent border-none outline-none px-4 py-2 text-sm"
+            placeholder="Execute neural command... (e.g. 'Analyze XAUUSD liquidity')"
+            className="flex-1 bg-transparent border-none outline-none px-2 py-3 text-[15px] placeholder:text-zinc-600 font-medium"
           />
           <button 
             type="submit"
             disabled={isLoading}
-            className="p-2 bg-primary text-primary-foreground rounded-xl hover:opacity-90 transition-all disabled:opacity-50"
+            className="p-4 bg-primary text-primary-foreground rounded-2xl hover:opacity-90 transition-all disabled:opacity-50 shadow-xl shadow-primary/30 glow-primary"
           >
-            <Send className="w-4 h-4" />
+            <SendIcon className="w-5 h-5" />
           </button>
         </div>
-        <p className="text-[10px] text-center text-muted-foreground mt-4 uppercase tracking-widest font-semibold flex items-center justify-center gap-2">
-          <Sparkles className="w-3 h-3 text-primary" />
-          Pawas AI Neural Control Protocol Active
-        </p>
+        <div className="flex justify-between items-center px-6 mt-4">
+          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-bold flex items-center gap-2">
+            <SparklesIcon className="w-3 h-3 text-primary animate-pulse" />
+            Neural Link: Secure & Encrypted
+          </p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.3em] font-bold">
+            Enter to Send • Shift + Enter for Line
+          </p>
+        </div>
       </form>
     </div>
   )

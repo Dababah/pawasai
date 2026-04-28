@@ -11,7 +11,8 @@ import {
   CheckCircle2Icon, 
   SettingsIcon,
   BrainCircuitIcon,
-  FileTextIcon
+  FileTextIcon,
+  ChevronRightIcon
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -29,15 +30,19 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 border-r border-border bg-card/50 backdrop-blur-xl h-screen flex flex-col fixed left-0 top-0">
-      <div className="p-6 flex items-center gap-3">
-        <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+    <aside className="w-64 border-r border-white/5 bg-[#050505] h-screen flex flex-col fixed left-0 top-0 z-50">
+      <div className="p-8 flex items-center gap-3">
+        <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center glow-primary">
           <BrainCircuitIcon className="w-5 h-5 text-primary-foreground" />
         </div>
-        <h1 className="font-bold text-xl tracking-tight">Pawas AI</h1>
+        <div>
+          <h1 className="font-bold text-lg tracking-tight font-outfit">Pawas AI</h1>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Neural Workspace</p>
+        </div>
       </div>
 
-      <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+        <p className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Main Menu</p>
         {navigation.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -45,38 +50,38 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-200 group",
+                "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 group",
                 isActive 
-                  ? "bg-primary/10 text-primary" 
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  ? "bg-white/5 text-primary border border-white/10" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/[0.02]"
               )}
             >
               <item.icon className={cn(
-                "w-5 h-5 transition-transform duration-200 group-hover:scale-110",
-                isActive ? "text-primary" : "text-muted-foreground"
+                "w-5 h-5 transition-all duration-300",
+                isActive ? "text-primary drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]" : "text-muted-foreground group-hover:text-foreground"
               )} />
-              <span className="font-medium text-sm">{item.name}</span>
-              {isActive && (
-                <div className="ml-auto w-1 h-1 bg-primary rounded-full" />
-              )}
+              <span className="font-medium text-sm flex-1">{item.name}</span>
+              {isActive && <ChevronRightIcon className="w-3 h-3 opacity-50" />}
             </Link>
           )
         })}
       </nav>
 
-      <div className="p-4 border-t border-border mt-auto">
-        <button className="flex items-center gap-3 px-3 py-2 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-all w-full">
-          <SettingsIcon className="w-5 h-5" />
-          <span className="font-medium text-sm">Settings</span>
-        </button>
-        <div className="mt-4 p-3 bg-muted/50 rounded-lg flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">
-            P
+      <div className="p-6 mt-auto">
+        <div className="glass p-4 rounded-2xl space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-purple-400 flex items-center justify-center text-xs font-bold text-primary-foreground border-2 border-white/10">
+              PA
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <p className="text-xs font-bold truncate">Pawas AI Master</p>
+              <p className="text-[10px] text-green-500 font-bold uppercase tracking-tighter">System Online</p>
+            </div>
           </div>
-          <div className="flex-1 overflow-hidden">
-            <p className="text-xs font-semibold truncate">Pawas AI User</p>
-            <p className="text-[10px] text-muted-foreground truncate">Free Tier</p>
-          </div>
+          <button className="w-full py-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all border border-white/10">
+            <SettingsIcon className="w-3 h-3 text-muted-foreground" />
+            Workspace Settings
+          </button>
         </div>
       </div>
     </aside>
