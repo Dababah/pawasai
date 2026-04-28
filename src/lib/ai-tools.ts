@@ -33,14 +33,28 @@ export const aiTools = {
     parameters: z.object({
       pair: z.string().describe('The trading pair (e.g., XAUUSD)'),
       type: z.enum(['Buy', 'Sell']).describe('Trade type'),
-      entry: z.string().describe('Entry price'),
-      exit: z.string().optional().describe('Exit price'),
-      profit: z.string().optional().describe('Profit or Loss amount'),
+      entry: z.number().describe('Entry price'),
+      exit: z.number().optional().describe('Exit price'),
+      profit: z.number().optional().describe('Profit or Loss amount'),
+      notes: z.string().optional().describe('Analysis or notes about the trade'),
     }),
-    execute: async (tradeData: any) => {
-      // In a real app, you'd have a 'trades' table. 
-      // For this demo, we simulate success as we are building the UI first.
-      return { success: true, message: `Trade for ${tradeData.pair} logged successfully.` };
+    execute: async ({ pair, type, entry, exit, profit, notes }: any) => {
+      console.log(`AI logging trade: ${pair} ${type}`);
+      const { data, error } = await supabase
+        .from('trading_logs')
+        .insert([{ 
+          pair, 
+          type, 
+          entry_price: entry, 
+          exit_price: exit, 
+          profit_loss: profit,
+          notes,
+          status: exit ? 'Closed' : 'Open'
+        }])
+        .select();
+      
+      if (error) throw error;
+      return { success: true, trade: data[0], message: `Trade for ${pair} logged successfully.` };
     },
   },
 
@@ -48,11 +62,77 @@ export const aiTools = {
     description: 'Update gadget inventory for Core Pawas business.',
     parameters: z.object({
       name: z.string().describe('Name of the gadget'),
-      action: z.enum(['add', 'remove', 'sold']).describe('Inventory action'),
-      quantity: z.number().describe('Quantity changed'),
+      action: z.enum(['add', 'remove', 'sold', 'update_price']).describe('Inventory action'),
+      quantity: z.number().optional().describe('Quantity changed'),
+      price: z.number().optional().describe('New price for the gadget'),
     }),
-    execute: async (data: any) => {
-      return { success: true, message: `Inventory for ${data.name} updated: ${data.action} ${data.quantity} units.` };
+    execute: async ({ name, action, quantity, price }: any) => {
+      console.log(`AI updating inventory: ${name} (${action})`);
+      
+      // First, find the item
+      const { data: items } = await supabase
+        .from('inventory')
+        .select('*')
+        .ilike('name', `%${name}%`);
+      
+      if (!items || items.length === 0) {
+        // If not found and it's 'add', create new
+        if (action === 'add') {
+          const { data, error } = await supabase
+            .from('inventory')
+            .insert([{ name, stock: quantity || 0, price: price || 0 }])
+            .select();
+          if (error) throw error;
+          return { success: true, item: data[0], message: `New item ${name} added to inventory.` };
+        }
+        return { success: false, message: `Item ${name} not found in inventory.` };
+      }
+
+      const item = items[0];
+      let newStock = item.stock;
+      let newPrice = item.price;
+
+      if (action === 'add') newStock += (quantity || 0);
+      if (action === 'remove' || action === 'sold') newStock -= (quantity || 0);
+      if (price) newPrice = price;
+
+      const { data, error } = await supabase
+        .from('inventory')
+        .update({ stock: newStock, price: newPrice })
+        .eq('id', item.id)
+        .select();
+      
+      if (error) throw error;
+      return { success: true, item: data[0], message: `Inventory for ${item.name} updated: Stock=${newStock}, Price=${newPrice}.` };
+    },
+  },
+
+  navigateApp: {
+    description: 'Navigate the user interface to different sections (Dashboard, Trading, Notes, Inventory).',
+    parameters: z.object({
+      destination: z.string().describe('The destination path or section name (e.g., "trading", "notes", "inventory")'),
+    }),
+    execute: async ({ destination }: any) => {
+      return { success: true, destination, message: `Navigating to ${destination}...` };
+    },
+  },
+
+  vectorSearch: {
+    description: 'Search through the user\'s knowledge base and notes using semantic search.',
+    parameters: z.object({
+      query: z.string().describe('The search query'),
+    }),
+    execute: async ({ query }: any) => {
+      console.log(`Performing vector search for: ${query}`);
+      // Placeholder for actual vector search logic
+      const { data, error } = await supabase
+        .from('notes')
+        .select('title, content_text')
+        .ilike('content_text', `%${query}%`)
+        .limit(3);
+      
+      if (error) throw error;
+      return { success: true, results: data, message: `Found ${data.length} relevant entries in the knowledge base.` };
     },
   }
 };

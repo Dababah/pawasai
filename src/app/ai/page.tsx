@@ -2,6 +2,8 @@
 
 import React, { useRef, useEffect, useState } from 'react'
 import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
+import { useRouter } from 'next/navigation'
 import { 
   SendIcon, 
   BotIcon, 
@@ -18,14 +20,22 @@ import { cn } from '@/lib/utils'
 
 export default function NeuralCorePage() {
   const [chatInput, setChatInput] = useState('')
+  const router = useRouter()
   
   // Adapt to the new headless useChat API in version 6
-  const { messages, append, status, error } = useChat({
-    api: '/api/chat',
+  const { messages, sendMessage, status, error } = useChat({
+    transport: new DefaultChatTransport({ api: '/api/chat' }),
     initialMessages: [
       { id: 'init', role: 'assistant', content: 'Neural Core Online. System integrity check complete. All modules synchronized. Standing by for Pawas AI Command Input.' }
-    ]
-  }) as any // Using any to handle version-specific prop names if they differ from types
+    ],
+    onToolCall({ toolCall }: any) {
+      if (toolCall.toolName === 'Maps_app') {
+        const { destination } = toolCall.args;
+        console.log(`Neural Core initiating navigation to: ${destination}`);
+        router.push(`/${destination.toLowerCase()}`);
+      }
+    }
+  }) as any
   
   const isLoading = status === 'streaming' || status === 'submitting'
   
@@ -40,9 +50,9 @@ export default function NeuralCorePage() {
     const val = chatInput
     setChatInput('')
     
-    // In newer versions, append or sendMessage is used
-    if (append) {
-      await append({ role: 'user', content: val })
+    // In newer versions, sendMessage is used with a text property
+    if (sendMessage) {
+      await sendMessage({ text: val })
     }
   }
 
