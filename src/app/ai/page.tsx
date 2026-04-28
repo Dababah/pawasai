@@ -24,7 +24,7 @@ export default function NeuralCorePage() {
   
   // Adapt to the new headless useChat API in version 6
   const { messages, sendMessage, status, error } = useChat({
-    transport: new DefaultChatTransport({ api: '/api/chat' }),
+    transport: new (DefaultChatTransport as any)({ api: '/api/chat' }),
     initialMessages: [
       { id: 'init', role: 'assistant', content: 'Neural Core Online. System integrity check complete. All modules synchronized. Standing by for Pawas AI Command Input.' }
     ],
@@ -35,7 +35,7 @@ export default function NeuralCorePage() {
         router.push(`/${destination.toLowerCase()}`);
       }
     }
-  }) as any
+  } as any) as any
   
   const isLoading = status === 'streaming' || status === 'submitting'
   
