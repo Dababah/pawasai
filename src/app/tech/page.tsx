@@ -1,7 +1,6 @@
-'use client'
 
 import React from 'react'
-import { Terminal, Github, Link as LinkIcon, Cpu, ShieldCheck, Network, ExternalLink } from 'lucide-react'
+import { Terminal, Github, Link as LucideLink, Cpu, ShieldCheck, Network, ExternalLink } from 'lucide-react'
 
 export default function TechLabPage() {
   return (
@@ -77,7 +76,7 @@ export default function TechLabPage() {
             <h3 className="font-bold font-outfit text-lg">Lab Resources</h3>
             <div className="space-y-3">
               {[
-                { name: 'Blockchain Paper v1.pdf', icon: LinkIcon },
+                { name: 'Blockchain Paper v1.pdf', icon: LucideLink },
                 { name: 'Network Topology Map', icon: Network },
                 { name: 'Lab Configuration Specs', icon: Cpu },
               ].map((resource, i) => (

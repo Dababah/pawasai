@@ -1,4 +1,3 @@
-'use client'
 
 import React from 'react'
 import { Package, Search, Plus, Filter, Tag, Smartphone } from 'lucide-react'

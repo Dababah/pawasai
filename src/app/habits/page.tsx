@@ -1,4 +1,3 @@
-'use client'
 
 import React from 'react'
 import { CheckCircle2, Circle, Flame, Target, Trophy, Calendar } from 'lucide-react'
