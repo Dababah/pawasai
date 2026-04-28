@@ -15,9 +15,11 @@ const dummyInventory = [
 export default function InventoryPage() {
   const [inventory, setInventory] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
+    setMounted(true)
     async function fetchInventory() {
       try {
         const { data, error } = await supabase
@@ -49,6 +51,8 @@ export default function InventoryPage() {
 
   const totalValue = inventory.reduce((acc, item) => acc + (item.stock * item.price), 0);
   const formatIDR = (val: number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(val);
+
+  if (!mounted) return null;
 
   return (
     <div className="space-y-12 animate-slide-in">

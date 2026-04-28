@@ -16,18 +16,20 @@ import { createClient } from '@/lib/supabase'
 import { format } from 'date-fns'
 
 const dummyTrades = [
-  { id: '1', pair: 'XAUUSD', type: 'Buy', entry_price: 2320.50, exit_price: 2345.00, profit_loss: 24.50, created_at: new Date().toISOString(), status: 'Closed' },
-  { id: '2', pair: 'BTCUSD', type: 'Sell', entry_price: 65200.00, exit_price: 64100.00, profit_loss: 1100.00, created_at: new Date().toISOString(), status: 'Closed' },
-  { id: '3', pair: 'XAUUSD', type: 'Sell', entry_price: 2350.00, exit_price: 2355.00, profit_loss: -5.00, created_at: new Date().toISOString(), status: 'Closed' },
+  { id: '1', pair: 'XAUUSD', type: 'Buy', entry_price: 2320.50, exit_price: 2345.00, profit_loss: 24.50, created_at: '2026-04-28T10:00:00Z', status: 'Closed' },
+  { id: '2', pair: 'BTCUSD', type: 'Sell', entry_price: 65200.00, exit_price: 64100.00, profit_loss: 1100.00, created_at: '2026-04-27T15:30:00Z', status: 'Closed' },
+  { id: '3', pair: 'XAUUSD', type: 'Sell', entry_price: 2350.00, exit_price: 2355.00, profit_loss: -5.00, created_at: '2026-04-26T09:15:00Z', status: 'Closed' },
 ]
 
 export default function TradingJournalPage() {
   const [activeTab, setActiveTab] = useState('executions')
   const [trades, setTrades] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
+    setMounted(true)
     async function fetchTrades() {
       try {
         const { data, error } = await supabase
@@ -50,6 +52,8 @@ export default function TradingJournalPage() {
 
   const totalProfit = trades.reduce((acc, trade) => acc + (trade.profit_loss || 0), 0);
   const winRate = trades.length > 0 ? (trades.filter(t => (t.profit_loss || 0) > 0).length / trades.length) * 100 : 0;
+
+  if (!mounted) return null;
 
   return (
     <div className="space-y-10 animate-fade-in">
