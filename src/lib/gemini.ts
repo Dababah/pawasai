@@ -3,14 +3,22 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_AI_API_KEY!);
 
 export const model = genAI.getGenerativeModel({ 
-  model: "gemini-1.5-flash-latest",
-  generationConfig: {
-    temperature: 0.7,
-    topK: 40,
-    topP: 0.95,
-    maxOutputTokens: 2048,
-  },
+  model: "gemini-1.5-pro", // Upgraded to Pro for core reasoning
 });
+
+export const embeddingModel = genAI.getGenerativeModel({ 
+  model: "text-embedding-004" 
+});
+
+export const getEmbeddings = async (text: string) => {
+  try {
+    const result = await embeddingModel.embedContent(text);
+    return result.embedding.values;
+  } catch (error) {
+    console.error("Embedding Error:", error);
+    return null;
+  }
+};
 
 export const neuralCore = async (prompt: string, context?: any) => {
   try {

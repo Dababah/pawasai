@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { createClient } from '@supabase/supabase-js';
+import { getEmbeddings } from './gemini';
 
 // Initialize a service role client for AI operations if needed, 
 // but for now we'll assume the user's connection or a general helper.
@@ -17,14 +18,23 @@ export const aiTools = {
       category: z.enum(['tech', 'trading', 'business', 'academic', 'general']).describe('Category of the note'),
     }),
     execute: async ({ title, content, category }: any) => {
-      console.log(`AI creating note: ${title}`);
+      console.log(`AI creating note with embeddings: ${title}`);
+      
+      // Generate embeddings for semantic search
+      const embedding = await getEmbeddings(`${title}\n${content}`);
+      
       const { data, error } = await supabase
         .from('notes')
-        .insert([{ title, content_text: content, category }])
+        .insert([{ 
+          title, 
+          content_text: content, 
+          category,
+          embedding 
+        }])
         .select();
       
       if (error) throw error;
-      return { success: true, note: data[0], message: `Note "${title}" created successfully in ${category}.` };
+      return { success: true, note: data[0], message: `Note "${title}" created successfully with semantic index.` };
     },
   },
   
@@ -123,16 +133,27 @@ export const aiTools = {
       query: z.string().describe('The search query'),
     }),
     execute: async ({ query }: any) => {
-      console.log(`Performing vector search for: ${query}`);
-      // Placeholder for actual vector search logic
-      const { data, error } = await supabase
-        .from('notes')
-        .select('title, content_text')
-        .ilike('content_text', `%${query}%`)
-        .limit(3);
+      console.log(`Performing real vector search for: ${query}`);
+      
+      // Generate embedding for the query
+      const queryEmbedding = await getEmbeddings(query);
+      if (!queryEmbedding) {
+        return { success: false, message: "Failed to generate search embedding." };
+      }
+
+      // Call the match_notes function in Supabase
+      const { data, error } = await supabase.rpc('match_notes', {
+        query_embedding: queryEmbedding,
+        match_threshold: 0.5,
+        match_count: 5
+      });
       
       if (error) throw error;
-      return { success: true, results: data, message: `Found ${data.length} relevant entries in the knowledge base.` };
+      return { 
+        success: true, 
+        results: data, 
+        message: `Neural Core found ${data.length} semantically relevant entries for your query.` 
+      };
     },
   }
 };
