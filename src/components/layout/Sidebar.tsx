@@ -4,25 +4,25 @@ import React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { 
-  LayoutDashboard, 
-  LineChart, 
-  Terminal, 
-  Package, 
-  CheckCircle2, 
-  Settings,
-  BrainCircuit,
-  FileText
+  LayoutDashboardIcon, 
+  LineChartIcon, 
+  TerminalIcon, 
+  PackageIcon, 
+  CheckCircle2Icon, 
+  SettingsIcon,
+  BrainCircuitIcon,
+  FileTextIcon
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Neural Core', href: '/ai', icon: BrainCircuit },
-  { name: 'Trading Journal', href: '/trading', icon: LineChart },
-  { name: 'Tech Lab', href: '/tech', icon: Terminal },
-  { name: 'Notes', href: '/notes', icon: FileText },
-  { name: 'Inventory', href: '/inventory', icon: Package },
-  { name: 'Habits', href: '/habits', icon: CheckCircle2 },
+  { name: 'Dashboard', href: '/', icon: LayoutDashboardIcon },
+  { name: 'Neural Core', href: '/ai', icon: BrainCircuitIcon },
+  { name: 'Trading Journal', href: '/trading', icon: LineChartIcon },
+  { name: 'Tech Lab', href: '/tech', icon: TerminalIcon },
+  { name: 'Notes', href: '/notes', icon: FileTextIcon },
+  { name: 'Inventory', href: '/inventory', icon: PackageIcon },
+  { name: 'Habits', href: '/habits', icon: CheckCircle2Icon },
 ]
 
 export function Sidebar() {
@@ -32,7 +32,7 @@ export function Sidebar() {
     <aside className="w-64 border-r border-border bg-card/50 backdrop-blur-xl h-screen flex flex-col fixed left-0 top-0">
       <div className="p-6 flex items-center gap-3">
         <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-          <BrainCircuit className="w-5 h-5 text-primary-foreground" />
+          <BrainCircuitIcon className="w-5 h-5 text-primary-foreground" />
         </div>
         <h1 className="font-bold text-xl tracking-tight">Pawas AI</h1>
       </div>
@@ -66,7 +66,7 @@ export function Sidebar() {
 
       <div className="p-4 border-t border-border mt-auto">
         <button className="flex items-center gap-3 px-3 py-2 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-all w-full">
-          <Settings className="w-5 h-5" />
+          <SettingsIcon className="w-5 h-5" />
           <span className="font-medium text-sm">Settings</span>
         </button>
         <div className="mt-4 p-3 bg-muted/50 rounded-lg flex items-center gap-3">

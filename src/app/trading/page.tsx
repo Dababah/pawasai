@@ -2,12 +2,12 @@
 
 import React, { useState } from 'react'
 import { 
-  Plus, 
-  TrendingUp, 
-  TrendingDown, 
-  Search,
-  Calendar,
-  DollarSign
+  PlusIcon, 
+  TrendingUpIcon, 
+  TrendingDownIcon, 
+  SearchIcon,
+  CalendarIcon,
+  DollarSignIcon
 } from 'lucide-react'
 
 const dummyTrades = [
@@ -41,7 +41,7 @@ export default function TradingJournalPage() {
             ))}
           </div>
           <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-            <Plus className="w-4 h-4" />
+            <PlusIcon className="w-4 h-4" />
             New Entry
           </button>
         </div>
@@ -50,7 +50,7 @@ export default function TradingJournalPage() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 space-y-6">
           <div className="glass p-4 rounded-2xl flex items-center gap-4">
-            <Search className="w-5 h-5 text-muted-foreground ml-2" />
+            <SearchIcon className="w-5 h-5 text-muted-foreground ml-2" />
             <input 
               placeholder="Filter by pair, date, or setup..." 
               className="bg-transparent border-none outline-none flex-1 text-sm"
@@ -119,7 +119,7 @@ export default function TradingJournalPage() {
 
           <div className="glass p-6 rounded-2xl space-y-4 bg-primary/5 border-primary/20">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-primary" />
+              <TrendingUpIcon className="w-4 h-4 text-primary" />
               <h3 className="font-bold font-outfit text-sm">Roadmap 2026</h3>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">

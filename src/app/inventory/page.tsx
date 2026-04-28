@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { Package, Search, Plus, Filter, Tag, Smartphone } from 'lucide-react'
+import { PackageIcon, SearchIcon, PlusIcon, FilterIcon, TagIcon, SmartphoneIcon } from 'lucide-react'
 
 const dummyInventory = [
   { id: 1, name: 'iPhone 15 Pro Max', category: 'Smartphone', stock: 5, price: 'Rp 18.500.000', status: 'In Stock' },
@@ -18,21 +18,21 @@ export default function InventoryPage() {
           <p className="text-muted-foreground mt-1">Manage Core Pawas gadget stock and marketplace listings.</p>
         </div>
         <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-          <Plus className="w-4 h-4" />
+          <PlusIcon className="w-4 h-4" />
           Add Item
         </button>
       </header>
 
       <div className="flex gap-4">
         <div className="glass flex-1 p-2 rounded-xl flex items-center gap-4">
-          <Search className="w-5 h-5 text-muted-foreground ml-2" />
+          <SearchIcon className="w-5 h-5 text-muted-foreground ml-2" />
           <input 
             placeholder="Search products by name, category, or status..." 
             className="bg-transparent border-none outline-none flex-1 text-sm"
           />
         </div>
         <button className="glass px-4 py-2 rounded-xl flex items-center gap-2 text-sm font-medium hover:bg-muted transition-colors">
-          <Filter className="w-4 h-4" />
+          <FilterIcon className="w-4 h-4" />
           Filters
         </button>
       </div>
@@ -41,7 +41,7 @@ export default function InventoryPage() {
         {dummyInventory.map((item) => (
           <div key={item.id} className="glass p-6 rounded-2xl group hover:border-primary/50 transition-all relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4">
-              <Smartphone className="w-12 h-12 text-white/5 group-hover:text-primary/10 transition-colors" />
+              <SmartphoneIcon className="w-12 h-12 text-white/5 group-hover:text-primary/10 transition-colors" />
             </div>
             <div className="relative z-10 space-y-4">
               <div className="flex justify-between items-start">
@@ -51,7 +51,7 @@ export default function InventoryPage() {
                 }`}>
                   {item.status}
                 </span>
-                <Tag className="w-4 h-4 text-muted-foreground" />
+                <TagIcon className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>
                 <h3 className="font-bold font-outfit text-lg">{item.name}</h3>

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { TiptapEditor } from '@/components/editor/TiptapEditor'
-import { FileText, Save, Clock, Share2, MoreHorizontal } from 'lucide-react'
+import { FileTextIcon, SaveIcon, ClockIcon, Share2Icon, MoreHorizontalIcon } from 'lucide-react'
 
 export default function NotesPage() {
   const [content, setContent] = useState('')
@@ -12,7 +12,7 @@ export default function NotesPage() {
       <header className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-muted rounded-lg text-muted-foreground">
-            <FileText className="w-5 h-5" />
+            <FileTextIcon className="w-5 h-5" />
           </div>
           <div>
             <input 
@@ -20,21 +20,21 @@ export default function NotesPage() {
               defaultValue="Untitled Research Note"
             />
             <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
-              <Clock className="w-3 h-3" />
+              <ClockIcon className="w-3 h-3" />
               Last edited 2 minutes ago
             </p>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <button className="p-2 text-muted-foreground hover:bg-muted rounded-lg transition-colors">
-            <Share2 className="w-4 h-4" />
+            <Share2Icon className="w-4 h-4" />
           </button>
           <button className="p-2 text-muted-foreground hover:bg-muted rounded-lg transition-colors">
-            <MoreHorizontal className="w-4 h-4" />
+            <MoreHorizontalIcon className="w-4 h-4" />
           </button>
           <div className="w-px h-6 bg-border mx-2" />
           <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-            <Save className="w-4 h-4" />
+            <SaveIcon className="w-4 h-4" />
             Sync to Cloud
           </button>
         </div>

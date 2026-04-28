@@ -1,6 +1,6 @@
 
 import React from 'react'
-import { CheckCircle2, Circle, Flame, Target, Trophy, Calendar } from 'lucide-react'
+import { CheckCircle2Icon, CircleIcon, FlameIcon, TargetIcon, TrophyIcon, CalendarIcon } from 'lucide-react'
 
 const habits = [
   { id: 1, name: 'Morning Gym Session', streak: 12, completed: true },
@@ -20,14 +20,14 @@ export default function HabitsPage() {
         </div>
         <div className="flex gap-4">
           <div className="glass px-4 py-2 rounded-xl flex items-center gap-3">
-            <Flame className="w-5 h-5 text-orange-500" />
+            <FlameIcon className="w-5 h-5 text-orange-500" />
             <div>
               <p className="text-[10px] text-muted-foreground uppercase font-bold">Best Streak</p>
               <p className="font-bold">156 Days</p>
             </div>
           </div>
           <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-            <Calendar className="w-4 h-4" />
+            <CalendarIcon className="w-4 h-4" />
             Weekly View
           </button>
         </div>
@@ -40,7 +40,7 @@ export default function HabitsPage() {
               <button className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
                 habit.completed ? 'bg-primary text-primary-foreground' : 'border-2 border-muted hover:border-primary'
               }`}>
-                {habit.completed ? <CheckCircle2 className="w-6 h-6" /> : <Circle className="w-6 h-6 text-muted-foreground" />}
+                {habit.completed ? <CheckCircle2Icon className="w-6 h-6" /> : <CircleIcon className="w-6 h-6 text-muted-foreground" />}
               </button>
               <div className="flex-1">
                 <h3 className={`font-bold font-outfit text-lg ${habit.completed ? 'text-muted-foreground line-through' : ''}`}>
@@ -48,11 +48,11 @@ export default function HabitsPage() {
                 </h3>
                 <div className="flex items-center gap-4 mt-1">
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Flame className="w-3 h-3 text-orange-500" />
+                    <FlameIcon className="w-3 h-3 text-orange-500" />
                     {habit.streak} day streak
                   </span>
                   <span className="text-xs text-muted-foreground flex items-center gap-1">
-                    <Target className="w-3 h-3 text-primary" />
+                    <TargetIcon className="w-3 h-3 text-primary" />
                     Daily Goal
                   </span>
                 </div>
@@ -71,7 +71,7 @@ export default function HabitsPage() {
         <div className="space-y-6">
           <div className="glass p-8 rounded-3xl text-center space-y-4 relative overflow-hidden">
             <div className="absolute -top-10 -right-10 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
-            <Trophy className="w-12 h-12 text-primary mx-auto" />
+            <TrophyIcon className="w-12 h-12 text-primary mx-auto" />
             <div>
               <h3 className="font-bold font-outfit text-xl">Consistency Score</h3>
               <p className="text-4xl font-bold text-primary mt-2">92%</p>

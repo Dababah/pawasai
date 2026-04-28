@@ -1,10 +1,10 @@
 import { 
-  TrendingUp, 
-  Terminal, 
-  Activity, 
-  Package, 
-  ArrowUpRight,
-  Plus
+  TrendingUpIcon, 
+  TerminalIcon, 
+  ActivityIcon, 
+  PackageIcon, 
+  ArrowUpRightIcon,
+  PlusIcon
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -17,24 +17,24 @@ export default function DashboardPage() {
           <p className="text-muted-foreground mt-1">Welcome back, Pawas. Systems are nominal.</p>
         </div>
         <button className="bg-primary text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 font-medium hover:opacity-90 transition-all shadow-lg shadow-primary/20">
-          <Plus className="w-4 h-4" />
+          <PlusIcon className="w-4 h-4" />
           Quick Capture
         </button>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { title: 'Trading Performance', value: '+12.5%', sub: 'XAUUSD / BTCUSD', icon: TrendingUp, color: 'text-green-500' },
-          { title: 'Tech Lab Progress', value: '85%', sub: 'Blockchain Audit Research', icon: Terminal, color: 'text-blue-500' },
-          { title: 'Business Inventory', value: '42 Units', sub: 'Core Pawas Gadgets', icon: Package, color: 'text-purple-500' },
-          { title: 'Habit Consistency', value: '92%', sub: 'Last 7 Days', icon: Activity, color: 'text-orange-500' },
+          { title: 'Trading Performance', value: '+12.5%', sub: 'XAUUSD / BTCUSD', icon: TrendingUpIcon, color: 'text-green-500' },
+          { title: 'Tech Lab Progress', value: '85%', sub: 'Blockchain Audit Research', icon: TerminalIcon, color: 'text-blue-500' },
+          { title: 'Business Inventory', value: '42 Units', sub: 'Core Pawas Gadgets', icon: PackageIcon, color: 'text-purple-500' },
+          { title: 'Habit Consistency', value: '92%', sub: 'Last 7 Days', icon: ActivityIcon, color: 'text-orange-500' },
         ].map((stat, i) => (
           <div key={i} className="glass p-6 rounded-2xl group hover:border-primary/50 transition-all duration-300">
             <div className="flex justify-between items-start">
               <div className={`p-2 rounded-xl bg-muted group-hover:bg-primary/10 transition-colors`}>
                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
               </div>
-              <ArrowUpRight className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+              <ArrowUpRightIcon className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="mt-4">
               <p className="text-sm text-muted-foreground font-medium">{stat.title}</p>
