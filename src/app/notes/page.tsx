@@ -9,30 +9,48 @@ export default function NotesPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [syncStatus, setSyncStatus] = useState<'idle' | 'processing' | 'synced'>('synced')
 
+  const handleAIAction = async (action: 'rewrite' | 'summarize' | 'fix-grammar') => {
+    if (!content.trim()) return
+    setIsProcessing(true)
+    
+    try {
+      const response = await fetch('/api/ai/edit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: content.replace(/<[^>]*>/g, ''), action })
+      })
+      const data = await response.json()
+      
+      if (data.result) {
+        // If it's a summary, we might want to append it or replace it.
+        // For now, let's replace the content with a formatted version.
+        const formattedResult = action === 'summarize' 
+          ? `<h2>AI Summary</h2><p>${data.result.replace(/\n/g, '<br/>')}</p><hr/>${content}`
+          : data.result.replace(/\n/g, '<br/>');
+        
+        setContent(formattedResult)
+      }
+    } catch (e) {
+      console.error("AI Action failed", e)
+    } finally {
+      setIsProcessing(false)
+    }
+  }
+
   const handleSync = async () => {
     setIsProcessing(true)
     setSyncStatus('processing')
     
-    // Simulate content save
-    setTimeout(async () => {
-      try {
-        const response = await fetch('/api/process-note', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ content: content.replace(/<[^>]*>/g, '') })
-        })
-        const result = await response.json()
-        
-        if (result.action_required) {
-          alert(`Neural Core Insight: ${result.message}\nItem: ${result.data.item_name}\nPrice: ${result.data.price}`)
-        }
-      } catch (e) {
-        console.error("Sync failed", e)
-      } finally {
-        setIsProcessing(false)
-        setSyncStatus('synced')
-      }
-    }, 1000)
+    try {
+      // Real sync logic with Supabase could go here
+      // For now, we simulate the processing
+      await new Promise(resolve => setTimeout(resolve, 1500))
+    } catch (e) {
+      console.error("Sync failed", e)
+    } finally {
+      setIsProcessing(false)
+      setSyncStatus('synced')
+    }
   }
 
   return (
@@ -67,7 +85,7 @@ export default function NotesPage() {
             className="bg-primary text-black px-6 py-3 rounded-2xl flex items-center gap-3 font-bold text-sm hover:opacity-90 transition-all shadow-2xl shadow-primary/30 glow-primary disabled:opacity-50"
           >
             {isProcessing ? <Loader2Icon className="w-4 h-4 animate-spin" /> : <SaveIcon className="w-4 h-4" />}
-            {isProcessing ? 'Processing...' : 'Synchronize'}
+            {isProcessing ? 'Neural Sync...' : 'Synchronize'}
           </button>
         </div>
       </header>
@@ -88,19 +106,32 @@ export default function NotesPage() {
             <p className="text-sm font-bold">{Math.ceil(content.split(' ').length / 200)} Min</p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => handleAIAction('rewrite')}
+            disabled={isProcessing}
+            className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-xl border border-primary/20 hover:bg-primary/20 transition-all text-primary text-[10px] font-bold uppercase tracking-widest"
+          >
+            <SparklesIcon className="w-3 h-3" />
+            Rewrite
+          </button>
+          <button 
+            onClick={() => handleAIAction('summarize')}
+            disabled={isProcessing}
+            className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 transition-all text-white text-[10px] font-bold uppercase tracking-widest"
+          >
+            Summarize
+          </button>
+          <div className="w-px h-6 bg-white/10 mx-2" />
           <div className="flex items-center gap-2 px-4 py-2 bg-green-500/10 rounded-xl border border-green-500/20">
             <span className={`w-1.5 h-1.5 rounded-full shadow-[0_0_8px_rgba(34,197,94,0.5)] ${isProcessing ? 'bg-orange-500 animate-pulse' : 'bg-green-500'}`} />
             <span className="text-[10px] font-bold text-green-500 uppercase tracking-widest">
-              {isProcessing ? 'Neural Scanning' : 'Supabase Linked'}
+              {isProcessing ? 'Neural Core Active' : 'System Ready'}
             </span>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-xl border border-primary/20 hover:bg-primary/20 transition-all">
-            <SparklesIcon className="w-3 h-3 text-primary" />
-            <span className="text-[10px] font-bold text-primary uppercase tracking-widest">AI Optimize</span>
-          </button>
         </div>
       </footer>
     </div>
+
   )
 }
