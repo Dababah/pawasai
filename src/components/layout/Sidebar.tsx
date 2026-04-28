@@ -12,7 +12,8 @@ import {
   SettingsIcon,
   BrainCircuitIcon,
   FileTextIcon,
-  ChevronRightIcon
+  SearchIcon,
+  PlusIcon
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -30,19 +31,27 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-64 border-r border-white/5 bg-[#050505] h-screen flex flex-col fixed left-0 top-0 z-50">
-      <div className="p-8 flex items-center gap-3">
-        <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center glow-primary">
-          <BrainCircuitIcon className="w-5 h-5 text-primary-foreground" />
+    <aside className="w-64 border-r border-[#27272a] bg-[#050505] h-screen flex flex-col fixed left-0 top-0 z-50">
+      <div className="p-6 flex items-center gap-3">
+        <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
+          <BrainCircuitIcon className="w-5 h-5 text-black" />
         </div>
         <div>
-          <h1 className="font-bold text-lg tracking-tight font-outfit">Pawas AI</h1>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Neural Workspace</p>
+          <h1 className="font-bold text-sm tracking-tight uppercase">Pawas AI</h1>
+          <p className="text-[10px] text-muted-foreground font-bold uppercase tracking-tighter opacity-50">Industrial v1.0</p>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-        <p className="px-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-4">Main Menu</p>
+      <div className="px-4 mb-4">
+        <button className="w-full flex items-center gap-3 px-3 py-2 bg-secondary/50 border border-border rounded-lg text-xs text-muted-foreground hover:bg-secondary transition-all">
+          <SearchIcon className="w-4 h-4" />
+          <span className="flex-1 text-left">Search Control...</span>
+          <kbd className="text-[10px] font-mono opacity-40">⌘K</kbd>
+        </button>
+      </div>
+
+      <nav className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+        <p className="px-3 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-3 mt-4 opacity-50">Workspace</p>
         {navigation.map((item) => {
           const isActive = pathname === item.href
           return (
@@ -50,37 +59,35 @@ export function Sidebar() {
               key={item.name}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 group",
+                "flex items-center gap-3 px-3 py-2 rounded-md transition-all duration-150 group",
                 isActive 
-                  ? "bg-white/5 text-primary border border-white/10" 
-                  : "text-muted-foreground hover:text-foreground hover:bg-white/[0.02]"
+                  ? "bg-primary/10 text-primary font-bold" 
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/[0.03]"
               )}
             >
               <item.icon className={cn(
-                "w-5 h-5 transition-all duration-300",
-                isActive ? "text-primary drop-shadow-[0_0_8px_rgba(139,92,246,0.5)]" : "text-muted-foreground group-hover:text-foreground"
+                "w-4 h-4 transition-colors",
+                isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
               )} />
-              <span className="font-medium text-sm flex-1">{item.name}</span>
-              {isActive && <ChevronRightIcon className="w-3 h-3 opacity-50" />}
+              <span className="text-[13px]">{item.name}</span>
             </Link>
           )
         })}
       </nav>
 
-      <div className="p-6 mt-auto">
-        <div className="glass p-4 rounded-2xl space-y-4">
+      <div className="p-4 border-t border-border mt-auto">
+        <div className="p-3 bg-white/[0.02] border border-border rounded-xl space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-purple-400 flex items-center justify-center text-xs font-bold text-primary-foreground border-2 border-white/10">
-              PA
+            <div className="w-8 h-8 rounded bg-gradient-to-br from-zinc-700 to-zinc-900 border border-border flex items-center justify-center text-[10px] font-bold">
+              P
             </div>
             <div className="flex-1 overflow-hidden">
-              <p className="text-xs font-bold truncate">Pawas AI Master</p>
-              <p className="text-[10px] text-green-500 font-bold uppercase tracking-tighter">System Online</p>
+              <p className="text-xs font-bold truncate">Pawas Master</p>
+              <p className="text-[10px] text-muted-foreground font-medium truncate uppercase tracking-tighter">Pro Developer</p>
             </div>
           </div>
-          <button className="w-full py-2 bg-white/5 hover:bg-white/10 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all border border-white/10">
-            <SettingsIcon className="w-3 h-3 text-muted-foreground" />
-            Workspace Settings
+          <button className="w-full py-1.5 bg-white/5 hover:bg-white/10 rounded-md text-[10px] font-bold uppercase tracking-widest transition-all border border-border">
+            Settings
           </button>
         </div>
       </div>
